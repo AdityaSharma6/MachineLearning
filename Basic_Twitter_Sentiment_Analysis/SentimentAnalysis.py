@@ -55,6 +55,7 @@ class SentimentAnalysis():
 
         print(average_perspective)
         print(frequent_perspective)
+        print(self.count)
 
     
     def execute(self):
