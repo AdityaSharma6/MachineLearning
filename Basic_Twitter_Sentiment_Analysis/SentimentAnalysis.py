@@ -3,6 +3,7 @@ from textblob import TextBlob
 import tweepy
 import json
 
+<<<<<<< HEAD
 class SentimentAnalysis():
     def __init__(self):
         self.consumer_key = "kQo51pA3BgWEuBnF7I1srqFfM"
@@ -34,6 +35,12 @@ if __name__ == "__main__":
     trial.execute()
 
 '''
+=======
+consumer_key = "KEY"
+consumer_secret = "KEY"
+access_token = "TOKEN"
+access_token_secret = "TOKEN"
+>>>>>>> 2cda0b6336f9e5be931fddafbcab3c0cf4457cd5
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
@@ -63,4 +70,9 @@ frequent_perspective = count
 
 print(average_perspective)
 print(frequent_perspective)
+<<<<<<< HEAD
 '''
+=======
+
+    
+>>>>>>> 2cda0b6336f9e5be931fddafbcab3c0cf4457cd5
