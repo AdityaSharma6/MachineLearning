@@ -1,37 +1,21 @@
 # API is a gate way that lets users access a server's internal functionality
 from textblob import TextBlob
-import matplotlib as plt 
+import matplotlib as plt
 import tweepy
 import json
+import Authorization as Authorize
 
 
 class SentimentAnalysis():
-    def __init__(self):
-        self.consumer_key = "kQo51pA3BgWEuBnF7I1srqFfM"
-        self.consumer_secret = "mk1tY4gvLfh5lfXfECuC2WzWhR6VcRXuNuH7ri91s0EsKPSTPv"
-        self.access_token = "1147611631448449027-FNo5Muxaa091HOWuKz2fXNXQPEYJkh"
-        self.access_token_secret = "kKJVeI9Wgt1XdnwHYrbsYc2aI4Xt0up2t1WuORrr0HcoX"
-    
 
     def setupTwitter(self):
-        auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)
-        auth.set_access_token(self.access_token, self.access_token_secret)
+        auth = tweepy.OAuthHandler(Authorize.CONSUMER_KEY, Authorize.CONSUMER_SECRET)
+        auth.set_access_token(Authorize.ACCESS_TOKEN, Authorize.ACCESS_TOKEN_SECRET)
         self.api = tweepy.API(auth)
     
-
-    def findFollowers(self):
-        following = self.api.followers("@Kajanth_K", count=200)
-        
-        for i in range(len(following)):
-            print(i)
-            print(following[i]._json["name"])
-            print(following[i]._json["screen_name"])
-            print("\n")
-        print(len(following))
-
     
     def searchUser(self):
-        self.publicTweets = self.api.search("Trump")
+        self.publicTweets = self.api.search(q = "Trump", count = 100)
         self.sentiment = []
         self.count = {"negative": 0, "positive": 0}
 
@@ -55,7 +39,6 @@ class SentimentAnalysis():
 
         print(average_perspective)
         print(frequent_perspective)
-        print(self.count)
 
     
     def execute(self):
