@@ -16,15 +16,24 @@ class SentimentAnalysis():
     
     def getUser(self):
         userObject = self.api.get_user("@realDonaldTrump")
-        print(userObject)
+        #print(userObject)
     
     def dateTime(self):
-        pastDate = datetime.date(2018, 7, 8)
+        pastDate = datetime.date(2019, 7, 5)
+        untilDate = datetime.date(2019, 7, 6)
         currentDate = datetime.date(2019, 8, 10)
         difference = currentDate - pastDate
+        print(difference)
 
         for i in range(difference.days):
-            print(i)
+            pastDate += datetime.timedelta(days = 1)
+            untilDate += datetime.timedelta(days = 1)
+            tweets = self.api.search(q = "Donald Trump", count = 100, result_type = "popular", since = pastDate, until = untilDate)
+            for j in tweets:
+                print(pastDate)
+                print(j.text)
+            
+            
         '''
         self.pastDate = datetime.datetime(2019,7,8)
         self.currentDate = datetime.datetime.now()
