@@ -4,6 +4,7 @@ import matplotlib as plt
 import tweepy
 import json
 import Authorization as Authorize
+import datetime
 
 
 class SentimentAnalysis():
@@ -13,7 +14,10 @@ class SentimentAnalysis():
         auth.set_access_token(Authorize.ACCESS_TOKEN, Authorize.ACCESS_TOKEN_SECRET)
         self.api = tweepy.API(auth)
     
-    
+    def getUser(self):
+        userObject = self.api.get_user("@realDonaldTrump")
+        print(userObject)
+    '''
     def searchUser(self):
         self.publicTweets = self.api.search(q = "Trump", count = 100)
         self.sentiment = []
@@ -39,12 +43,14 @@ class SentimentAnalysis():
 
         print(average_perspective)
         print(frequent_perspective)
+    '''
 
     
     def execute(self):
         self.setupTwitter()
-        self.searchUser()
-        self.returnResults()
+        self.getUser()
+        #self.searchUser()
+        #self.returnResults()
 
 
 if __name__ == "__main__":
