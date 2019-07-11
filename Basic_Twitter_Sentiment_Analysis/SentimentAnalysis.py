@@ -19,10 +19,20 @@ class SentimentAnalysis():
         print(userObject)
     
     def dateTime(self):
-        pastDate = datetime.datetime(2018,1,1)
-        currentDate = datetime.datetime.now()
+        pastDate = datetime.date(2018, 7, 8)
+        currentDate = datetime.date(2019, 8, 10)
         difference = currentDate - pastDate
-        print(difference)
+
+        for i in range(difference.days):
+            print(i)
+        '''
+        self.pastDate = datetime.datetime(2019,7,8)
+        self.currentDate = datetime.datetime.now()
+        self.difference = self.currentDate - self.pastDate
+        print(self.difference)
+        '''
+
+
     '''
     def searchUser(self):
         self.publicTweets = self.api.search(q = "Trump", count = 100)
