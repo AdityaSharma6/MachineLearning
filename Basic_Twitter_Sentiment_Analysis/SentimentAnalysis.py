@@ -17,6 +17,12 @@ class SentimentAnalysis():
     def getUser(self):
         userObject = self.api.get_user("@realDonaldTrump")
         print(userObject)
+    
+    def dateTime(self):
+        pastDate = datetime.datetime(2018,1,1)
+        currentDate = datetime.datetime.now()
+        difference = currentDate - pastDate
+        print(difference)
     '''
     def searchUser(self):
         self.publicTweets = self.api.search(q = "Trump", count = 100)
@@ -49,6 +55,7 @@ class SentimentAnalysis():
     def execute(self):
         self.setupTwitter()
         self.getUser()
+        self.dateTime()
         #self.searchUser()
         #self.returnResults()
 
