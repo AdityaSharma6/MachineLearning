@@ -21,18 +21,21 @@ class SentimentAnalysis():
     def dateTime(self):
         pastDate = datetime.date(2019, 7, 5)
         untilDate = datetime.date(2019, 7, 6)
-        currentDate = datetime.date(2019, 8, 10)
+        currentDate = datetime.date(2019, 7, 10)
         difference = currentDate - pastDate
         print(difference)
 
         for i in range(difference.days):
             pastDate += datetime.timedelta(days = 1)
             untilDate += datetime.timedelta(days = 1)
-            tweets = self.api.search(q = "Donald Trump", count = 100, result_type = "popular", since = pastDate, until = untilDate)
+            tweets = tweepy.Cursor(self.api.search, q = "Donald Trump", since = pastDate, until = untilDate).items(1000) # You can search for hashtags by replacing the Query with your designated Hashtag
+            print("############################# \n")
+            k = 0
             for j in tweets:
+                print(k)
+                k += 1
                 print(pastDate)
                 print(j.text)
-            
             
         '''
         self.pastDate = datetime.datetime(2019,7,8)
