@@ -5,6 +5,7 @@ import tweepy
 import json
 import Authorization as Authorize
 import datetime
+import csv
 
 
 class SentimentAnalysis():
@@ -24,18 +25,25 @@ class SentimentAnalysis():
         currentDate = datetime.date(2019, 7, 10)
         difference = currentDate - pastDate
         print(difference)
+        self.tweetsList = []
 
         for i in range(difference.days):
             pastDate += datetime.timedelta(days = 1)
             untilDate += datetime.timedelta(days = 1)
-            tweets = tweepy.Cursor(self.api.search, q = "Donald Trump", since = pastDate, until = untilDate).items(1000) # You can search for hashtags by replacing the Query with your designated Hashtag
+            tweets = tweepy.Cursor(self.api.search, q = "Donald Trump", since = pastDate, until = untilDate).items(100) # You can search for hashtags by replacing the Query with your designated Hashtag
             print("############################# \n")
             k = 0
             for j in tweets:
                 print(k)
                 k += 1
                 print(pastDate)
-                print(j.text)
+                self.tweetsList.append(j.text)
+    
+    def writeCSV(self):
+        with open('Tweets.csv', 'w') as csvFile:
+            writer = csv.writer(csvFile)
+            writer.writerows(self.tweetsList)
+
             
         '''
         self.pastDate = datetime.datetime(2019,7,8)
@@ -78,6 +86,7 @@ class SentimentAnalysis():
         self.setupTwitter()
         self.getUser()
         self.dateTime()
+        self.writeCSV()
         #self.searchUser()
         #self.returnResults()
 
