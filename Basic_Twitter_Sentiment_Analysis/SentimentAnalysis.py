@@ -23,7 +23,7 @@ class SentimentAnalysis():
         self.tweets_list = []
 
         self.query = "Donald Trump"
-        self.daily_tweet_count = 100
+        self.daily_tweet_count = 5
 
     def setupTwitter(self):
         auth = tweepy.OAuthHandler(self.CONSUMER_KEY, self.CONSUMER_SECRET)
@@ -94,8 +94,9 @@ class SentimentAnalysis():
     
     def execute(self):
         self.setupTwitter()
-        self.getUser()
+        #self.getUser()
         self.time_difference()
+        self.extractTweets()
         self.writeCSV()
         #self.searchUser()
         #self.returnResults()
