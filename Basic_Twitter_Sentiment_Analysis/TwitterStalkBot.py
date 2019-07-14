@@ -16,7 +16,7 @@ class SentimentAnalysis():
         self.api = tweepy.API(auth)
     
     def findFollowers(self):
-        following = self.api.followers("@Kajanth_K", count=200)
+        following = self.api.followers("@Aditya", count=200)
         
         for i in range(len(following)):
             print(i)
