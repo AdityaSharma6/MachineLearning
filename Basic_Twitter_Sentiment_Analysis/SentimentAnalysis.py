@@ -16,14 +16,15 @@ class SentimentAnalysis():
         self.ACCESS_TOKEN = Authorize.ACCESS_TOKEN
         self.ACCESS_TOKEN_SECRET = Authorize.ACCESS_TOKEN_SECRET
 
-        self.past_date = datetime.date(2019, 7, 5)
-        self.next_day = datetime.date(2019, 7, 6)
+        self.past_date = datetime.date(2019, 7, 7)
+        self.next_day = datetime.date(2019, 7, 8)
         self.future_date = datetime.date(2019, 7, 10)
 
-        self.tweets_list = []
+        self.tweets_list = [["Tweet Description", "Date", "Favorite Count", "Retweet Count", "Sentiment"]]
 
         self.query = "Donald Trump"
-        self.daily_tweet_count = 5
+        self.daily_tweet_count = 10
+        self.tweet_type = "popular"
 
     def setupTwitter(self):
         auth = tweepy.OAuthHandler(self.CONSUMER_KEY, self.CONSUMER_SECRET)
@@ -41,18 +42,19 @@ class SentimentAnalysis():
         for i in range(self.difference):
             self.past_date += datetime.timedelta(days = 1)
             self.next_day += datetime.timedelta(days = 1)
-            tweets = tweepy.Cursor(self.api.search, q = self.query, since = self.past_date, until = self.next_day, lang = "en").items(self.daily_tweet_count) # You can search for hashtags by replacing the Query with your designated Hashtag
-            tweet_counter = 0
+            tweets = tweepy.Cursor(self.api.search, q = self.query, since = self.past_date, until = self.next_day, lang = "en", tweet_mode = "extended", result_type = self.tweet_type).items(self.daily_tweet_count) # You can search for hashtags by replacing the Query with your designated Hashtag
             for j in tweets:
-                print(tweet_counter)
-                tweet_counter += 1
-                print(self.past_date)
-                self.tweets_list.append([j.text, self.past_date])
+                analysis = TextBlob(j.full_text)
+                value = analysis.sentiment.polarity
+                self.tweets_list.append([j.full_text, self.past_date, j.favorite_count, j.retweet_count, value])
+                
     
     def writeCSV(self):
-        with open('Tweets.csv', 'w') as csvFile:
-            writer = csv.writer(csvFile)
+        print("Hi")
+        with open('Tweets.csv', 'w') as csv_file:
+            writer = csv.writer(csv_file)
             writer.writerows(self.tweets_list)
+    
 
             
         '''
