@@ -23,7 +23,7 @@ class SentimentAnalysis():
         self.tweets_list = [["Tweet Description", "Date", "Favorite Count", "Retweet Count", "Sentiment"]]
 
         self.query = "Donald Trump"
-        self.daily_tweet_count = 10
+        self.daily_tweet_count = 30
         self.tweet_type = "popular"
 
     def setupTwitter(self):
@@ -38,17 +38,19 @@ class SentimentAnalysis():
     def time_difference(self):
         self.difference = (self.future_date - self.past_date).days
     
-    def extractTweets(self):
+    def search_tweets(self):
         for i in range(self.difference):
             self.past_date += datetime.timedelta(days = 1)
             self.next_day += datetime.timedelta(days = 1)
             tweets = tweepy.Cursor(self.api.search, q = self.query, since = self.past_date, until = self.next_day, lang = "en", tweet_mode = "extended", result_type = self.tweet_type).items(self.daily_tweet_count) # You can search for hashtags by replacing the Query with your designated Hashtag
-            for j in tweets:
-                analysis = TextBlob(j.full_text)
-                value = analysis.sentiment.polarity
-                self.tweets_list.append([j.full_text, self.past_date, j.favorite_count, j.retweet_count, value])
+            self.analyze_sentiment(tweets)
+
+    def analyze_sentiment(self, tweets):
+        for j in tweets:
+            analysis = TextBlob(j.full_text)
+            value = analysis.sentiment.polarity
+            self.tweets_list.append([j.full_text, self.past_date, j.favorite_count, j.retweet_count, value])
                 
-    
     def writeCSV(self):
         print("Hi")
         with open('Tweets.csv', 'w') as csv_file:
@@ -98,7 +100,7 @@ class SentimentAnalysis():
         self.setupTwitter()
         #self.getUser()
         self.time_difference()
-        self.extractTweets()
+        self.search_tweets()
         self.writeCSV()
         #self.searchUser()
         #self.returnResults()
