@@ -2,13 +2,11 @@ import matplotlib.pyplot as plt
 
 class Sentiment():
 
-    def plot_sentiment(self):
-        x = [1,2,3,4,5,6,7,8,9,10,11,12]
-        y = [1,2,3,4,5,6,7,8,9,10,110,12]
-        plt.plot(x,y, label = "Graph")
-        plt.xlabel("Dates")
-        plt.ylabel("Sentiment")
-        plt.legend()
+    def plot_sentiment(self, negative, positive, neutral):
+        slice_labels = ["negative", "positive", "neutral"]
+        slices = [negative, positive, neutral]
+        colors = ["red", "green", "purple"]
+        plt.pie(slices, labels = slice_labels, startangle = 90, colors = colors)
         plt.show()
         
     
@@ -20,7 +18,7 @@ class Sentiment():
         plt.show()
     
     def execute(self):
-        self.plot_sentiment()
+        self.plot_sentiment(10,12,15)
         self.plot_favorites()
 
 
