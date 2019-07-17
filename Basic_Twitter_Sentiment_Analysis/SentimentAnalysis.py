@@ -28,6 +28,7 @@ class SentimentAnalysis():
         self.tweet_type = "mixed" #recent, popular, mixed
         ##################################################################################################
         self.sentiment_distribution = {"positive": 0, "negative": 0, "neutral": 0}
+        self.population_sentiment_distribution = {"positive": 0, "negative": 0, "neutral": 0}
 
     def setupTwitter(self):
         auth = tweepy.OAuthHandler(self.CONSUMER_KEY, self.CONSUMER_SECRET)
@@ -57,8 +58,9 @@ class SentimentAnalysis():
         for j in tweets:
             analysis = TextBlob(j.full_text)
             value = analysis.sentiment.polarity
+            num_retweets = j.retweet_count
             self.sentiment_spread(value)
-            self.tweets_list.append([j.full_text, self.past_date, j.favorite_count, j.retweet_count, value])
+            self.tweets_list.append([j.full_text, self.past_date, j.favorite_count, num_retweets, value])
     
 
     def sentiment_spread(self, value):
@@ -68,6 +70,24 @@ class SentimentAnalysis():
             self.sentiment_distribution["negative"] += 1
         else:
             self.sentiment_distribution["neutral"] += 1
+    
+
+    def population_sentiment(self, value, num_retweets):
+        if value > 0:
+            if num_retweets > 0:
+                self.sentiment_distribution["positive"] += num_retweets
+            else:
+                self.sentiment_distribution["positive"] += 1
+        elif value < 0:
+            if num_retweets > 0:
+                self.sentiment_distribution["negative"] += num_retweets
+            else:
+                self.sentiment_distribution["negative"] += 1
+        else:
+            if num_retweets > 0:
+                self.sentiment_distribution["neutral"] += num_retweets
+            else:
+                self.sentiment_distribution["neutral"] += 1
 
 
     def writeCSV(self):
@@ -83,7 +103,9 @@ class SentimentAnalysis():
         self.time_difference()
         self.search_tweets()
         self.writeCSV()
-        Visualize.plot_sentiment(self.sentiment_distribution["positive"], self.sentiment_distribution["negative"], self.sentiment_distribution["neutral"])
+        Visualize.pie_plot_sentiment(self.sentiment_distribution["positive"], self.sentiment_distribution["negative"], self.sentiment_distribution["neutral"])
+        Visualize.pie_plot_sentiment(self.population_sentiment_distribution["positive"], self.population_sentiment_distribution["negative"], self.population_sentiment_distribution["neutral"])
+
 
 
 
