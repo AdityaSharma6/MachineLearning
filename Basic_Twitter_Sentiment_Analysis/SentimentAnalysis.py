@@ -18,17 +18,38 @@ class SentimentAnalysis():
         self.ACCESS_TOKEN = Authorize.ACCESS_TOKEN
         self.ACCESS_TOKEN_SECRET = Authorize.ACCESS_TOKEN_SECRET
         ##################################################################################################
-        self.past_date = datetime.date(2019, 7, 5)
-        self.next_day = datetime.date(2019, 7, 6)
-        self.future_date = datetime.date(2019, 7, 15)
+        self.past_date = datetime.date(2019, 7, 6)
+        self.next_day = datetime.date(2019, 7, 7)
+        self.future_date = datetime.date(2019, 7, 16)
         ##################################################################################################
         self.tweets_list = [["Tweet Description", "Date", "Favorite Count", "Retweet Count", "Sentiment"]]
-        self.query = "Logan Paul"
-        self.daily_tweet_count = 50
-        self.tweet_type = "mixed" #recent, popular, mixed
+        self.query = "Donald Trump"
+        self.daily_tweet_count = 10
+        self.tweet_type = "popular" #recent, popular, mixed
         ##################################################################################################
         self.sentiment_distribution = {"positive": 0, "negative": 0, "neutral": 0}
         self.population_sentiment_distribution = {"positive": 0, "negative": 0, "neutral": 0}
+        self.sentiment_distribution1 = {"Tweets": {"Pos": 0, "Neg": 0, "Neu": 0},
+                                        "Population": {"Pos": 0, "Neg": 0, "Neu": 0} }
+    
+    def get_pos_pop_sentiment(self):
+        return self.sentiment_distribution1["Population"]["Pos"]
+    
+    def get_neg_pop_sentiment(self):
+        return self.sentiment_distribution1["Population"]["Neg"]
+    
+    def get_neu_pop_sentiment(self):
+        return self.sentiment_distribution1["Population"]["Neu"]
+    
+    def get_pos_tweet_sentiment(self):
+        return self.sentiment_distribution1["Tweets"]["Pos"]
+    
+    def get_neg_tweet_sentiment(self):
+        return self.sentiment_distribution1["Tweets"]["Neg"]
+    
+    def get_neu_tweet_sentiment(self):
+        return self.sentiment_distribution1["Tweets"]["Neu"]
+    
 
     def setupTwitter(self):
         auth = tweepy.OAuthHandler(self.CONSUMER_KEY, self.CONSUMER_SECRET)
@@ -60,34 +81,35 @@ class SentimentAnalysis():
             value = analysis.sentiment.polarity
             num_retweets = j.retweet_count
             self.sentiment_spread(value)
+            self.population_sentiment_spread(value, num_retweets)
             self.tweets_list.append([j.full_text, self.past_date, j.favorite_count, num_retweets, value])
     
 
     def sentiment_spread(self, value):
         if value > 0:
-            self.sentiment_distribution["positive"] += 1
+            self.sentiment_distribution1["Tweets"]["Pos"] += 1
         elif value < 0:
-            self.sentiment_distribution["negative"] += 1
+            self.sentiment_distribution1["Tweets"]["Neg"] += 1
         else:
-            self.sentiment_distribution["neutral"] += 1
+            self.sentiment_distribution1["Tweets"]["Neu"] += 1
     
 
-    def population_sentiment(self, value, num_retweets):
+    def population_sentiment_spread(self, value, num_retweets):
         if value > 0:
             if num_retweets > 0:
-                self.sentiment_distribution["positive"] += num_retweets
+                self.sentiment_distribution1["Population"]["Pos"] += num_retweets
             else:
-                self.sentiment_distribution["positive"] += 1
+                self.sentiment_distribution1["Population"]["Pos"] += 1
         elif value < 0:
             if num_retweets > 0:
-                self.sentiment_distribution["negative"] += num_retweets
+                self.sentiment_distribution1["Population"]["Neg"] += num_retweets
             else:
-                self.sentiment_distribution["negative"] += 1
+                self.sentiment_distribution1["Population"]["Neg"] += 1
         else:
             if num_retweets > 0:
-                self.sentiment_distribution["neutral"] += num_retweets
+                self.sentiment_distribution1["Population"]["Neu"] += num_retweets
             else:
-                self.sentiment_distribution["neutral"] += 1
+                self.sentiment_distribution1["Population"]["Neu"] += 1
 
 
     def writeCSV(self):
@@ -95,16 +117,20 @@ class SentimentAnalysis():
         with open('Tweets.csv', 'w') as csv_file:
             writer = csv.writer(csv_file)
             writer.writerows(self.tweets_list)
-
     
-    def execute(self):
+    def visuals(self):
         Visualize = Visualization()
+        plot1 = Visualize.pie_plot_sentiment("Sentiment Spread from Tweets",self.get_pos_tweet_sentiment(), self.get_neg_tweet_sentiment(), self.get_neu_tweet_sentiment())
+        plot2 = Visualize.pie_plot_sentiment("Sentiment Spread from Population", self.get_pos_pop_sentiment(), self.get_neg_pop_sentiment(), self.get_neu_pop_sentiment())
+        plots = [plot1, plot2]
+        Visualize.dashboard(plots)
+
+    def execute(self):
         self.setupTwitter()
         self.time_difference()
         self.search_tweets()
         self.writeCSV()
-        Visualize.pie_plot_sentiment(self.sentiment_distribution["positive"], self.sentiment_distribution["negative"], self.sentiment_distribution["neutral"])
-        Visualize.pie_plot_sentiment(self.population_sentiment_distribution["positive"], self.population_sentiment_distribution["negative"], self.population_sentiment_distribution["neutral"])
+        self.visuals()
 
 
 
