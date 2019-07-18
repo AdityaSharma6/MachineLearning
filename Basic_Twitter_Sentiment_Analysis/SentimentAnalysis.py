@@ -18,17 +18,15 @@ class SentimentAnalysis():
         self.ACCESS_TOKEN = Authorize.ACCESS_TOKEN
         self.ACCESS_TOKEN_SECRET = Authorize.ACCESS_TOKEN_SECRET
         ##################################################################################################
-        self.past_date = datetime.date(2019, 7, 6)
-        self.next_day = datetime.date(2019, 7, 7)
-        self.future_date = datetime.date(2019, 7, 16)
+        self.past_date = datetime.date(2019, 7, 7)
+        self.next_day = datetime.date(2019, 7, 8)
+        self.future_date = datetime.date(2019, 7, 17)
         ##################################################################################################
         self.tweets_list = [["Tweet Description", "Date", "Favorite Count", "Retweet Count", "Sentiment"]]
         self.query = "Donald Trump"
         self.daily_tweet_count = 10
         self.tweet_type = "popular" #recent, popular, mixed
         ##################################################################################################
-        self.sentiment_distribution = {"positive": 0, "negative": 0, "neutral": 0}
-        self.population_sentiment_distribution = {"positive": 0, "negative": 0, "neutral": 0}
         self.sentiment_distribution1 = {"Tweets": {"Pos": 0, "Neg": 0, "Neu": 0},
                                         "Population": {"Pos": 0, "Neg": 0, "Neu": 0} }
     
@@ -120,10 +118,10 @@ class SentimentAnalysis():
     
     def visuals(self):
         Visualize = Visualization()
-        plot1 = Visualize.pie_plot_sentiment("Sentiment Spread from Tweets",self.get_pos_tweet_sentiment(), self.get_neg_tweet_sentiment(), self.get_neu_tweet_sentiment())
-        plot2 = Visualize.pie_plot_sentiment("Sentiment Spread from Population", self.get_pos_pop_sentiment(), self.get_neg_pop_sentiment(), self.get_neu_pop_sentiment())
-        plots = [plot1, plot2]
-        Visualize.dashboard(plots)
+        Visualize.pie_plot_sentiment("Sentiment Spread from Tweets",self.get_pos_tweet_sentiment(), self.get_neg_tweet_sentiment(), self.get_neu_tweet_sentiment())
+        Visualize.pie_plot_sentiment("Sentiment Spread from Population", self.get_pos_pop_sentiment(), self.get_neg_pop_sentiment(), self.get_neu_pop_sentiment())
+        
+        #Visualize.dashboard(plots)
 
     def execute(self):
         self.setupTwitter()
