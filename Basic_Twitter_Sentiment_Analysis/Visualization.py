@@ -7,7 +7,7 @@ class Visualization():
         slices = [negative, positive, neutral]
         colors = ["red", "green", "purple"]
         plt.pie(slices, labels = slice_labels, startangle = 90, colors = colors)
-        plt.legend(title = "Sentiment", slice_labels, loc="upper right")
+        plt.legend(title="Sentiment", slice_labels, loc="upper right")
         plt.title(title)
         plt.show()
 
