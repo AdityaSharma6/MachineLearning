@@ -18,26 +18,25 @@ class Linear__Regression():
         #print(self.file_data.describe())
 
     def variable_reshape(self):
-        self.X = self.file_data[self.X_name].values.reshape(-1,1)
-        self.Y = self.file_data[self.Y_name].values.reshape(-1,1)
+        self.X = self.file_data[self.X_name].values.reshape(-1,1) # This command turns everything into something like a feature vector so that the weights can be assigned
+        self.Y = self.file_data[self.Y_name].values.reshape(-1,1) # To return back to its normal form, do .flatten()
 
     def set_data(self):
-        self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(self.X, self.Y, test_size = 0.2, random_state = 0)
+        self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(self.X, self.Y, test_size = 0.25, random_state = 0)
     
     def train_model(self):
-        self.linear_regressor = LinearRegression()
-        self.linear_regressor.fit(self.X_train, self.Y_train)
+        self.linear_regressor = LinearRegression() # Loading pre-built & optimized regressor model 
+        self.linear_regressor.fit(self.X_train, self.Y_train) # Training the model on the specified data set
     
     def test_model(self):
         self.Y_pred = self.linear_regressor.predict(self.X_test)
         self.test_results = pd.DataFrame({"Real Values": self.Y_test.flatten(), "Predicted Values": self.Y_pred.flatten()})
-        self.test_results = self.test_results.head(300)
+        self.test_results = self.test_results.head(200) # This is for visualization, you will visualize some of the data to see the accuracy
         #print(self.test_results)
     
     def test_model_visualized(self):
         dataframe = self.test_results
-        dataframe_list = dataframe.values.tolist()
-        #print("Hi")
+        dataframe_list = dataframe.values.tolist() # Converting back to List format because MatPlotLib takes lists.
         
         datapoints = []
         predicted_values = []
@@ -62,11 +61,9 @@ class Linear__Regression():
         plt.xlabel(self.X_name)
         plt.ylabel(self.Y_name)
         plt.title(f"Relationship between {self.X_name} and {self.Y_name}")
-        plt.legend(loc="lower left")
+        plt.legend(loc="upper left")
         plt.show()
     
-
-
     def execute(self):
         self.read_csv()
         self.variable_reshape()
