@@ -29,8 +29,8 @@ class Linear__Regression():
         self.linear_regressor.fit(self.X_train, self.Y_train)
     
     def test_model(self):
-        Y_pred = self.linear_regressor.predict(self.X_test)
-        self.test_results = pd.DataFrame({"Real Values": self.Y_test.flatten(), "Predicted Values": Y_pred.flatten()})
+        self.Y_pred = self.linear_regressor.predict(self.X_test)
+        self.test_results = pd.DataFrame({"Real Values": self.Y_test.flatten(), "Predicted Values": self.Y_pred.flatten()})
         self.test_results = self.test_results.head(300)
         #print(self.test_results)
     
@@ -54,8 +54,17 @@ class Linear__Regression():
         plt.fill_between(datapoints, predicted_values, actual_values, where= predicted_values < actual_values, facecolor="black")
         plt.xlabel("Data Points")
         plt.show()
-        
-
+    
+    def actual_model_visualized(self):
+        plt.scatter(self.X_test, self.Y_test, color = "blue", label = "Data Points")
+        plt.plot(self.X_test, self.Y_pred, color = "red", label = "Model Prediction")
+        plt.plot(0,0, color = "black", label = self.linear_regressor.score(self.X_test, self.Y_test))
+        plt.xlabel(self.X_name)
+        plt.ylabel(self.Y_name)
+        plt.title(f"Relationship between {self.X_name} and {self.Y_name}")
+        plt.legend(loc="lower left")
+        plt.show()
+    
 
 
     def execute(self):
@@ -65,7 +74,4 @@ class Linear__Regression():
         self.train_model()
         self.test_model()
         self.test_model_visualized()
-        
-
-
-#file_name = pd.read_csv("Weather.csv")
+        self.actual_model_visualized()
