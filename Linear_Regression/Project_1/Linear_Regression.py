@@ -7,7 +7,6 @@ import os
 import matplotlib.pyplot as plt
 
 class Linear__Regression():
-    
     def __init__(self, file, independent, dependent,):
         self.directory = os.getcwd() + "/" + file # Get the file directory
         self.X_name = independent # Variable Name
@@ -16,11 +15,14 @@ class Linear__Regression():
     
     def read_csv(self):
         self.file_data = pd.read_csv(self.directory) # In a [[Variable1], [Variable2]] format. Regressor takes [[Variable1, Variable2], [Variable1, Variable2]] format
+        self.file_data.isnull().any
+        self.file_data = self.file_data.fillna(method='ffill')
         #print(self.file_data.describe())
 
     def variable_reshape(self):
         self.X = self.file_data[self.X_name].values.reshape(-1,1) # This command turns everything into something like a feature vector so that the weights can be assigned
         self.Y = self.file_data[self.Y_name].values.reshape(-1,1) # To return back to its normal form, do .flatten()
+        
 
     def set_data(self):
         self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(self.X, self.Y, test_size = 0.25, random_state = 0)
@@ -64,17 +66,18 @@ class Linear__Regression():
         ax1.plot(0,0, color = "black", label = self.linear_regressor.score(self.X_test, self.Y_test))
         ax1.set_xlabel(self.X_name)
         ax1.set_ylabel(self.Y_name)
-        ax1.set_title(f"Relationship betweeb {self.X_name} and {self.Y_name}")
+        ax1.set_title(f"Relationship between {self.X_name} and {self.Y_name}")
         ax1.legend(loc="upper left")
 
         ax2 = fig.add_subplot(212)
-        ax2.plot(self.datapoints, self.predicted_values, color = "red", linewidth = 1)
-        ax2.plot(self.datapoints, self.actual_values, color = "red", linewidth = 1)
+        ax2.plot(self.datapoints, self.predicted_values, color = "red", linewidth = 0.5, label = "Predicted Values. Black filling is error")
+        ax2.plot(self.datapoints, self.actual_values, color = "blue", linewidth = 0.5, label = "Actual Values")
         ax2.fill_between(self.datapoints, self.predicted_values, self.actual_values, where= self.predicted_values > self.actual_values, facecolor="black")
         ax2.fill_between(self.datapoints, self.predicted_values, self.actual_values, where= self.predicted_values < self.actual_values, facecolor="black")
         ax2.set_xlabel("Data Points")
         ax2.set_ylabel("Values")
-        ax2.set_title(f"Relationship between the Predicted and Actual Values")
+        ax2.set_title(f"Relationship between the Predicted and Actual Values to display Error")
+        ax2.legend(loc="upper left")
         plt.tight_layout(pad=0.5)
         plt.show()
 
@@ -89,8 +92,6 @@ class Linear__Regression():
         plt.show()
         '''
     
-
-
     def execute(self):
         self.read_csv()
         self.variable_reshape()
@@ -100,4 +101,3 @@ class Linear__Regression():
         self.prepare_visualization()
         #self.visualize_error()
         self.visualize_model()
-
