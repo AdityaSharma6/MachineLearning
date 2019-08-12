@@ -1,11 +1,10 @@
 from MLR import MultivariateLinearRegression
 
-var_count = int(input("How many independent variables do you have? "))
-independent = []
+file_name = "winequality.csv"#input("Please enter the name of the CSV File that will act as the data set. Ex: \"Weather.csv\" ")
 
-for i in range(len(var_count)):
-    value = input("Please input the name of this independent variable: ")
-    independent.append(value)
+#var_count = int(input("How many independent variables do you have? "))
+independent = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar', 'chlorides', 'free sulfur dioxide', 'total sulfur dioxide', 'density', 'pH', 'sulphates','alcohol'] #[]
+dependent = "quality"#input("What is the name of the dependent variable? Please enter the exact name from the CSV. ")
 
-MLR = MultivariateLinearRegression(independent)
+MLR = MultivariateLinearRegression(file_name, independent, dependent)
 MLR.execute()
